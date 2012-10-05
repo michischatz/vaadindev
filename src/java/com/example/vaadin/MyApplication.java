@@ -31,8 +31,27 @@ import com.example.vaadin.ui.ListView;
 import com.example.vaadin.ui.PersonForm;
 //Personenlist laden
 import com.example.vaadin.ui.PersonList;
+//Datencontainer laden
+import com.example.vaadin.data.PersonContainer;
 
 public class MyApplication extends Application {
+    /*
+     * Variablen
+     */
+    private Button newContact = new Button("Kontakt hinzufügen");
+    private Button search = new Button("Suche");
+    private Button share = new Button("Teilen");
+    private Button help = new Button("Hilfe");
+    private HorizontalSplitPanel horizontalSplit = new HorizontalSplitPanel();
+    private NavigationTree tree = new NavigationTree();
+    private ListView listView = null;
+    private PersonList personList = null;
+    private PersonForm personForm = null;
+    private PersonContainer dataSource = PersonContainer.createWithTestData();
+    
+    /*
+     * Methoden
+     */
     @Override
     public void init() {
         setTheme("runo");
@@ -71,28 +90,16 @@ public class MyApplication extends Application {
     private void setMainComponent(Component c) {
         horizontalSplit.setSecondComponent(c);
     }
-    
-    /*
-     * Listenview schnell laden
-     */
-    
-    private ListView listView = null;
-    private PersonList personList = null;
-    private PersonForm personForm = null;
-    
+       
     private ListView getListView() {
         if(listView == null){
-            personList = new PersonList();
+            personList = new PersonList(this); //this ist erst in einem späterem Kapitel notwendig!!
             personForm = new PersonForm();
             listView = new ListView(personList, personForm);
         }
         return listView;
     }
-    
-    private Button newContact = new Button("Kontakt hinzufügen");
-    private Button search = new Button("Suche");
-    private Button share = new Button("Teilen");
-    private Button help = new Button("Hilfe");
-    private HorizontalSplitPanel horizontalSplit = new HorizontalSplitPanel();
-    private NavigationTree tree = new NavigationTree();
+    public PersonContainer getDataSource() {
+        return dataSource;
+    }    
 }
