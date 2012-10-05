@@ -21,137 +21,40 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 public class MyApplication extends Application {
-
-    private static String[] fields = { "First Name", "Last Name", "Company",
-            "Mobile Phone", "Work Phone", "Home Phone", "Work Email",
-            "Home Email", "Street", "Zip", "City", "State", "Country" };
-    private static String[] visibleCols = new String[] { "Last Name",
-            "First Name", "Company" };
-
-    private Table contactList = new Table();
-    private Form contactEditor = new Form();
-    private HorizontalLayout bottomLeftCorner = new HorizontalLayout();
-    private Button contactRemovalButton;
-    private IndexedContainer addressBookData = createDummyData();
-
     @Override
     public void init() {
-        initLayout();
-        initContactAddRemoveButtons();
-        initAddressList();
-        initFilteringControls();
+        setTheme("runo");
+        buildMainLayout();
     }
-
-    private void initLayout() {
-        HorizontalSplitPanel splitPanel = new HorizontalSplitPanel();
-        setMainWindow(new Window("Address Book", splitPanel));
-        VerticalLayout left = new VerticalLayout();
-        left.setSizeFull();
-        left.addComponent(contactList);
-        contactList.setSizeFull();
-        left.setExpandRatio(contactList, 1);
-        splitPanel.addComponent(left);
-        splitPanel.addComponent(contactEditor);
-        contactEditor.setCaption("Contact details editor");
-        contactEditor.setSizeFull();
-        contactEditor.getLayout().setMargin(true);
-        contactEditor.setImmediate(true);
-        bottomLeftCorner.setWidth("100%");
-        left.addComponent(bottomLeftCorner);
+    private void buildMainLayout(){
+        setMainWindow(new Window("Adressbuch Demo Programm"));
+        VerticalLayout layout = new VerticalLayout();
+        layout.setSizeFull();
+        
+        layout.addComponent(createToolbar());
+        layout.addComponent(horizontalSplit);
+        
+        /* Allocate all available extra space to the horizontal split panel */
+        layout.setExpandRatio(horizontalSplit, 1);
+        /* Set the initial split position so we can have a 200 pixel menu to the left */
+//        horizontalSplit.setSplitPosition(200, SplitPanel.UNITS_PIXELS);
+        
+        getMainWindow().setContent(layout);
     }
-
-    private void initContactAddRemoveButtons() {
-        // New item button
-        bottomLeftCorner.addComponent(new Button("+",
-                new Button.ClickListener() {
-                    public void buttonClick(ClickEvent event) {
-                        // Add new contact "John Doe" as the first item
-                        Object id = ((IndexedContainer) contactList
-                              .getContainerDataSource()).addItemAt(0);
-                        contactList.getItem(id).getItemProperty("First Name")
-                              .setValue("John");
-                        contactList.getItem(id).getItemProperty("Last Name")
-                              .setValue("Doe");
-
-                        // Select the newly added item and scroll to the item
-                        contactList.setValue(id);
-                        contactList.setCurrentPageFirstItemId(id);
-                    }
-                }));
-
-        // Remove item button
-        contactRemovalButton = new Button("-", new Button.ClickListener() {
-            public void buttonClick(ClickEvent event) {
-                contactList.removeItem(contactList.getValue());
-                contactList.select(null);
-            }
-        });
-        contactRemovalButton.setVisible(false);
-        bottomLeftCorner.addComponent(contactRemovalButton);
+    
+    public HorizontalLayout createToolbar() {
+        HorizontalLayout lo = new HorizontalLayout();
+        lo.addComponent(newContact);
+        lo.addComponent(search);
+        lo.addComponent(share);
+        lo.addComponent(help);
+        
+        return lo;
     }
-
-    private void initAddressList() {
-        contactList.setContainerDataSource(addressBookData);
-        contactList.setVisibleColumns(visibleCols);
-        contactList.setSelectable(true);
-        contactList.setImmediate(true);
-        contactList.addListener(new Property.ValueChangeListener() {
-            public void valueChange(ValueChangeEvent event) {
-                Object id = contactList.getValue();
-                contactEditor.setItemDataSource(id == null ? null : contactList
-                        .getItem(id));
-                contactRemovalButton.setVisible(id != null);
-            }
-        });
-    }
-
-    private void initFilteringControls() {
-        for (final String pn : visibleCols) {
-            final TextField sf = new TextField();
-            bottomLeftCorner.addComponent(sf);
-            sf.setWidth("100%");
-            sf.setInputPrompt(pn);
-            sf.setImmediate(true);
-            bottomLeftCorner.setExpandRatio(sf, 1);
-            sf.addListener(new Property.ValueChangeListener() {
-                public void valueChange(ValueChangeEvent event) {
-                    addressBookData.removeContainerFilters(pn);
-                    if (sf.toString().length() > 0 && !pn.equals(sf.toString())) {
-                        addressBookData.addContainerFilter(pn, sf.toString(),
-                                true, false);
-                    }
-                    getMainWindow().showNotification(
-                            "" + addressBookData.size() + " matches found");
-                }
-            });
-        }
-    }
-
-    private static IndexedContainer createDummyData() {
-
-        String[] fnames = { "Peter", "Alice", "Joshua", "Mike", "Olivia",
-                "Nina", "Alex", "Rita", "Dan", "Umberto", "Henrik", "Rene",
-                "Lisa", "Marge" };
-        String[] lnames = { "Smith", "Gordon", "Simpson", "Brown", "Clavel",
-                "Simons", "Verne", "Scott", "Allison", "Gates", "Rowling",
-                "Barks", "Ross", "Schneider", "Tate" };
-
-        IndexedContainer ic = new IndexedContainer();
-
-        for (String p : fields) {
-            ic.addContainerProperty(p, String.class, "");
-        }
-
-        // Create dummy data by randomly combining first and last names
-        for (int i = 0; i < 1000; i++) {
-            Object id = ic.addItem();
-            ic.getContainerProperty(id, "First Name").setValue(
-                    fnames[(int) (fnames.length * Math.random())]);
-            ic.getContainerProperty(id, "Last Name").setValue(
-                    lnames[(int) (lnames.length * Math.random())]);
-        }
-
-        return ic;
-    }
-
+    
+    private Button newContact = new Button("Kontakt hinzufügen");
+    private Button search = new Button("Suche");
+    private Button share = new Button("Teilen");
+    private Button help = new Button("Hilfe");
+    private HorizontalSplitPanel horizontalSplit = new HorizontalSplitPanel();
 }
