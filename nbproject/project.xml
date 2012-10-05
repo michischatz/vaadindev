@@ -7,8 +7,7 @@
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <web-module-libraries>
                 <library dirs="200">
-                    <file>${libs.Vaadin.classpath}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
+                    <file>${libs.Vaadin-6.8.4.classpath}</file>
                 </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
