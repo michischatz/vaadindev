@@ -19,13 +19,27 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+//Weitere Componenten laden
+import com.vaadin.ui.Component;
+//SplitPanel laden
+import com.vaadin.ui.SplitPanel;
+//Eigenes Package (Navigationsbaum) importieren
+import com.example.vaadin.ui.NavigationTree;
+//ListView laden
+import com.example.vaadin.ui.ListView;
+//PersonenForm laden
+import com.example.vaadin.ui.PersonForm;
+//Personenlist laden
+import com.example.vaadin.ui.PersonList;
 
 public class MyApplication extends Application {
     @Override
     public void init() {
         setTheme("runo");
         buildMainLayout();
+        setMainComponent(getListView());
     }
+    
     private void buildMainLayout(){
         setMainWindow(new Window("Adressbuch Demo Programm"));
         VerticalLayout layout = new VerticalLayout();
@@ -37,7 +51,9 @@ public class MyApplication extends Application {
         /* Allocate all available extra space to the horizontal split panel */
         layout.setExpandRatio(horizontalSplit, 1);
         /* Set the initial split position so we can have a 200 pixel menu to the left */
-//        horizontalSplit.setSplitPosition(200, SplitPanel.UNITS_PIXELS);
+        horizontalSplit.setSplitPosition(200, SplitPanel.UNITS_PIXELS); //Funktioniert nicht
+        /* Navigationstree hinzufügen*/
+        horizontalSplit.setFirstComponent(tree);
         
         getMainWindow().setContent(layout);
     }
@@ -52,9 +68,31 @@ public class MyApplication extends Application {
         return lo;
     }
     
+    private void setMainComponent(Component c) {
+        horizontalSplit.setSecondComponent(c);
+    }
+    
+    /*
+     * Listenview schnell laden
+     */
+    
+    private ListView listView = null;
+    private PersonList personList = null;
+    private PersonForm personForm = null;
+    
+    private ListView getListView() {
+        if(listView == null){
+            personList = new PersonList();
+            personForm = new PersonForm();
+            listView = new ListView(personList, personForm);
+        }
+        return listView;
+    }
+    
     private Button newContact = new Button("Kontakt hinzufügen");
     private Button search = new Button("Suche");
     private Button share = new Button("Teilen");
     private Button help = new Button("Hilfe");
     private HorizontalSplitPanel horizontalSplit = new HorizontalSplitPanel();
+    private NavigationTree tree = new NavigationTree();
 }
