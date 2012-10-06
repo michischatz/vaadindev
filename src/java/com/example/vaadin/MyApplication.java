@@ -26,8 +26,9 @@ import com.example.vaadin.ui.PersonForm;
 import com.example.vaadin.ui.PersonList;
 //Datencontainer laden
 import com.example.vaadin.data.PersonContainer;
-//SearchView laden
+//Views laden
 import com.example.vaadin.ui.SearchView;
+import com.example.vaadin.ui.HelpWindow;
 //ClickListener
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -42,11 +43,15 @@ public class MyApplication extends Application implements ClickListener {
     private Button help = new Button("Hilfe");
     private HorizontalSplitPanel horizontalSplit = new HorizontalSplitPanel();
     private NavigationTree tree = new NavigationTree();
+    private PersonContainer dataSource = PersonContainer.createWithTestData();
+    /*
+     * Im tut als Lazy bezeichnete Hilfen
+     */
     private ListView listView = null;
     private PersonList personList = null;
     private PersonForm personForm = null;
-    private PersonContainer dataSource = PersonContainer.createWithTestData();
     private SearchView searchView = null;
+    private HelpWindow helpWindow = null;
     
     /*
      * Methoden
@@ -78,11 +83,14 @@ public class MyApplication extends Application implements ClickListener {
     
     public HorizontalLayout createToolbar() {
         HorizontalLayout lo = new HorizontalLayout();
+        //Componenten laden
         lo.addComponent(newContact);
         lo.addComponent(search);
         lo.addComponent(share);
         lo.addComponent(help);
+        
         search.addListener((Button.ClickListener) this);
+        help.addListener((ClickListener) this);
         
         return lo;
     }
@@ -109,15 +117,29 @@ public class MyApplication extends Application implements ClickListener {
         }
         return searchView;
     }
+    
+    private HelpWindow getHelpWindow(){
+        if(helpWindow == null){
+            helpWindow = new HelpWindow();
+        }
+        return helpWindow;
+    }
 
     public void buttonClick(ClickEvent event) {
         final Button source = event.getButton();
         if (source == search) {
             showSearchView();
         }
+        if (source == help){
+            showHelpWindow();
+        }
     }
 
     private void showSearchView() {
         setMainComponent(getSearchView());
+    }
+    
+    private void showHelpWindow(){
+        getMainWindow().addWindow(getHelpWindow());
     }
 }
