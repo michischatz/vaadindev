@@ -7,16 +7,9 @@
 package com.example.vaadin;           
 
 import com.vaadin.Application;
-import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 //Weitere Componenten laden
@@ -33,8 +26,13 @@ import com.example.vaadin.ui.PersonForm;
 import com.example.vaadin.ui.PersonList;
 //Datencontainer laden
 import com.example.vaadin.data.PersonContainer;
+//SearchView laden
+import com.example.vaadin.ui.SearchView;
+//ClickListener
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 
-public class MyApplication extends Application {
+public class MyApplication extends Application implements ClickListener {
     /*
      * Variablen
      */
@@ -48,6 +46,7 @@ public class MyApplication extends Application {
     private PersonList personList = null;
     private PersonForm personForm = null;
     private PersonContainer dataSource = PersonContainer.createWithTestData();
+    private SearchView searchView = null;
     
     /*
      * Methoden
@@ -83,6 +82,7 @@ public class MyApplication extends Application {
         lo.addComponent(search);
         lo.addComponent(share);
         lo.addComponent(help);
+        search.addListener((Button.ClickListener) this);
         
         return lo;
     }
@@ -93,7 +93,7 @@ public class MyApplication extends Application {
        
     private ListView getListView() {
         if(listView == null){
-            personList = new PersonList(this); //this ist erst in einem späterem Kapitel notwendig!!
+            personList = new PersonList(this); //this ist erst in einem späterem Kapitel (iwo bei 4) notwendig!!
             personForm = new PersonForm();
             listView = new ListView(personList, personForm);
         }
@@ -101,5 +101,23 @@ public class MyApplication extends Application {
     }
     public PersonContainer getDataSource() {
         return dataSource;
-    }    
+    }  
+    
+    private SearchView getSearchView(){
+        if(searchView == null){
+            searchView = new SearchView(this);
+        }
+        return searchView;
+    }
+
+    public void buttonClick(ClickEvent event) {
+        final Button source = event.getButton();
+        if (source == search) {
+            showSearchView();
+        }
+    }
+
+    private void showSearchView() {
+        setMainComponent(getSearchView());
+    }
 }
