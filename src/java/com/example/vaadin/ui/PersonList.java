@@ -10,7 +10,12 @@ package com.example.vaadin.ui;
  */
 import com.vaadin.ui.Table;
 import com.example.vaadin.MyApplication;
+import com.example.vaadin.data.Person;
 import com.example.vaadin.data.PersonContainer;
+import com.vaadin.terminal.ExternalResource;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Link;
+import com.vaadin.ui.Table;
 
 public class PersonList extends Table {
     
@@ -24,6 +29,18 @@ public class PersonList extends Table {
          //Daten aus dem Generator aus dem data-Package laden
          setContainerDataSource(app.getDataSource());
          setVisibleColumns(PersonContainer.NATURAL_COL_ORDER);
-         setColumnHeaders(PersonContainer.COL_HEADERS_GERMAN);         
+         setColumnHeaders(PersonContainer.COL_HEADERS_GERMAN);
+         
+         /*
+          * Make table selectable, react immediatedly to user events, and pass events to the
+          * controller (our main application)
+          */
+         setSelectable(true);
+         setImmediate(true);
+         addListener((ValueChangeListener) app);
+         /*
+          * We don't want to allow users to de-select a row 
+          */
+         setNullSelectionAllowed(false);
      }    
 }

@@ -2,6 +2,9 @@
  * MyApplication.java
  *
  * Created on 5. Oktober 2012, 19:54
+ * 
+ * @author Michael Schatz
+ * @version 1.0
  */
  
 package com.example.vaadin;           
@@ -30,11 +33,22 @@ import com.example.vaadin.data.PersonContainer;
 import com.example.vaadin.ui.SearchView;
 import com.example.vaadin.ui.SharingOptions;
 import com.example.vaadin.ui.HelpWindow;
+import com.sun.xml.internal.ws.api.PropertySet;
 //ClickListener
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Field;
+//Property
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
+//valueChangex
+import com.vaadin.data.Item;
+//ImteClicks
+import com.vaadin.event.ItemClickEvent;
+import com.vaadin.event.ItemClickEvent.ItemClickListener;
 
-public class MyApplication extends Application implements ClickListener {
+public class MyApplication extends Application implements ClickListener, ValueChangeListener, ItemClickListener {
     /*
      * Variablen
      */
@@ -43,7 +57,7 @@ public class MyApplication extends Application implements ClickListener {
     private Button share = new Button("Teilen");
     private Button help = new Button("Hilfe");
     private HorizontalSplitPanel horizontalSplit = new HorizontalSplitPanel();
-    private NavigationTree tree = new NavigationTree();
+    private NavigationTree tree = new NavigationTree(this);
     private PersonContainer dataSource = PersonContainer.createWithTestData();
     /*
      * Im tut als Lazy bezeichnete Hilfen
@@ -158,5 +172,32 @@ public class MyApplication extends Application implements ClickListener {
     
     private void showShareWindow(){
         getMainWindow().addWindow(getSharingOptions());
+    }
+    
+    private void showListView() {
+        setMainComponent(getListView());
+    }
+    
+    public void valueChange(ValueChangeEvent event){
+        Property property = event.getProperty();
+        if (property == personList) {
+            Item item = personList.getItem(personList.getValue());
+            if (item != personForm.getItemDataSource()) {
+                personForm.setItemDataSource(item);
+            }
+        }
+    }
+    
+    public void itemClick(ItemClickEvent event) {
+        if (event.getSource() == tree) {
+            Object itemId = event.getItemId();
+            if (itemId != null) {
+                if (NavigationTree.SHOW_ALL.equals(itemId)) {
+                    showListView();
+                }
+            } else if (itemId == NavigationTree.SEARCH) {
+                showSearchView();
+            } 
+        }
     }
 }
