@@ -28,6 +28,7 @@ import com.example.vaadin.ui.PersonList;
 import com.example.vaadin.data.PersonContainer;
 //Views laden
 import com.example.vaadin.ui.SearchView;
+import com.example.vaadin.ui.SharingOptions;
 import com.example.vaadin.ui.HelpWindow;
 //ClickListener
 import com.vaadin.ui.Button.ClickEvent;
@@ -51,6 +52,7 @@ public class MyApplication extends Application implements ClickListener {
     private PersonList personList = null;
     private PersonForm personForm = null;
     private SearchView searchView = null;
+    private SharingOptions sharingOptions = null;
     private HelpWindow helpWindow = null;
     
     /*
@@ -91,6 +93,7 @@ public class MyApplication extends Application implements ClickListener {
         
         search.addListener((Button.ClickListener) this);
         help.addListener((ClickListener) this);
+        share.addListener((ClickListener) this);
         
         return lo;
     }
@@ -118,6 +121,13 @@ public class MyApplication extends Application implements ClickListener {
         return searchView;
     }
     
+    public SharingOptions getSharingOptions() {
+        if(sharingOptions == null){
+            sharingOptions = new SharingOptions();
+        }
+        return sharingOptions;
+    }
+    
     private HelpWindow getHelpWindow(){
         if(helpWindow == null){
             helpWindow = new HelpWindow();
@@ -133,6 +143,9 @@ public class MyApplication extends Application implements ClickListener {
         if (source == help){
             showHelpWindow();
         }
+        if(source == share){
+            showShareWindow();
+        }
     }
 
     private void showSearchView() {
@@ -141,5 +154,9 @@ public class MyApplication extends Application implements ClickListener {
     
     private void showHelpWindow(){
         getMainWindow().addWindow(getHelpWindow());
+    }
+    
+    private void showShareWindow(){
+        getMainWindow().addWindow(getSharingOptions());
     }
 }
