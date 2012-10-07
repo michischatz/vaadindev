@@ -108,6 +108,7 @@ public class MyApplication extends Application implements ClickListener, ValueCh
         search.addListener((Button.ClickListener) this);
         help.addListener((ClickListener) this);
         share.addListener((ClickListener) this);
+        newContact.addListener((ClickListener) this);
         
         return lo;
     }
@@ -153,12 +154,12 @@ public class MyApplication extends Application implements ClickListener, ValueCh
         final Button source = event.getButton();
         if (source == search) {
             showSearchView();
-        }
-        if (source == help){
+        } else if (source == help){
             showHelpWindow();
-        }
-        if(source == share){
+        } else if(source == share){
             showShareWindow();
+        } else if(source==newContact){
+            addNewContact();
         }
     }
 
@@ -176,6 +177,11 @@ public class MyApplication extends Application implements ClickListener, ValueCh
     
     private void showListView() {
         setMainComponent(getListView());
+    }
+    
+    private void addNewContact(){
+        showListView();
+        personForm.addContact();
     }
     
     public void valueChange(ValueChangeEvent event){

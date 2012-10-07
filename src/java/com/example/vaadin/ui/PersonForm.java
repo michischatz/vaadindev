@@ -28,6 +28,9 @@ public class PersonForm extends Form implements ClickListener {
     private Button cancel = new Button("Abbrechen", (ClickListener) this);
     private Button edit = new Button("Bearbeiten", (ClickListener) this);
     private MyApplication app;
+    /* Für die neue Kontaktform */
+    private boolean newContactMode = false;
+    private Person newPerson = null;
     
     public PersonForm(MyApplication app) {
         this.app = app;
@@ -54,9 +57,24 @@ public class PersonForm extends Form implements ClickListener {
                 return;
             }
             commit();
+            
+            if(newContactMode){
+                /* We need to add the new person to the container */
+                Item addedItem = app.getDataSource().addItem(newPerson);
+                /*
+                 * We must update the form to use the Item from our datasource as we are now in edit mode
+                 */
+                setItemDataSource(addedItem);
+                newContactMode = false;
+            }
             setReadOnly(true);
         } else if(source==cancel){
-            discard();
+            if (newContactMode) {
+                newContactMode = false;
+                setItemDataSource(null);
+            } else {
+                discard();
+            }
             setReadOnly(true);
         } else if(source==edit){
             setReadOnly(false);
@@ -65,6 +83,7 @@ public class PersonForm extends Form implements ClickListener {
     
     @Override
     public void setItemDataSource(Item newDataSource){
+        newContactMode = false;
         if(newDataSource!=null){
             List<Object> orderedProperties = Arrays
                     .asList(PersonContainer.NATURAL_COL_ORDER);
@@ -84,5 +103,13 @@ public class PersonForm extends Form implements ClickListener {
         save.setVisible(!readOnly);
         cancel.setVisible(!readOnly);
         edit.setVisible(readOnly);
+    }
+    
+    public void addContact(){
+        //Create a temporary item for the form
+        newPerson = new Person();
+        setItemDataSource(new BeanItem(newPerson));
+        newContactMode = true;
+        setReadOnly(false);
     }
 }

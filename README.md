@@ -6,7 +6,7 @@ nachgebaut zum lernen von Michael Schatz
 
 Kapitel derzeit in Arbeit
 -------
-5.4 Improving the form
+5.6 Implementing the search functionality
 
 Bereits erledigte Kapitel
 -------
