@@ -119,7 +119,7 @@ public class MyApplication extends Application implements ClickListener, ValueCh
     private ListView getListView() {
         if(listView == null){
             personList = new PersonList(this); //this ist erst in einem späterem Kapitel (iwo bei 4) notwendig!!
-            personForm = new PersonForm();
+            personForm = new PersonForm(this);
             listView = new ListView(personList, personForm);
         }
         return listView;
@@ -194,10 +194,10 @@ public class MyApplication extends Application implements ClickListener, ValueCh
             if (itemId != null) {
                 if (NavigationTree.SHOW_ALL.equals(itemId)) {
                     showListView();
+                } else if (NavigationTree.SEARCH.equals(itemId)){
+                    showSearchView();
                 }
-            } else if (itemId == NavigationTree.SEARCH) {
-                showSearchView();
-            } 
+            }
         }
     }
 }
