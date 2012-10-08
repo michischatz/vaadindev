@@ -6,10 +6,11 @@ nachgebaut zum lernen von Michael Schatz
 
 Kapitel derzeit in Arbeit
 -------
-5.6 Implementing the search functionality
+6.1 Turning email addresses into links
 
 Bereits erledigte Kapitel
 -------
+5. Creating user interactions
 4. Data Binding Basics
 3. Application Skeleton
 2. Project setup

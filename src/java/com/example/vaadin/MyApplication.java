@@ -29,6 +29,7 @@ import com.example.vaadin.ui.PersonForm;
 import com.example.vaadin.ui.PersonList;
 //Datencontainer laden
 import com.example.vaadin.data.PersonContainer;
+import com.example.vaadin.data.SearchFilter;
 //Views laden
 import com.example.vaadin.ui.SearchView;
 import com.example.vaadin.ui.SharingOptions;
@@ -199,11 +200,34 @@ public class MyApplication extends Application implements ClickListener, ValueCh
             Object itemId = event.getItemId();
             if (itemId != null) {
                 if (NavigationTree.SHOW_ALL.equals(itemId)) {
+                    // clear previous filters
+                    getDataSource().removeAllContainerFilters();
                     showListView();
                 } else if (NavigationTree.SEARCH.equals(itemId)){
                     showSearchView();
+                } else if (itemId instanceof SearchFilter) {
+                    search((SearchFilter) itemId);
                 }
             }
         }
+    }
+    
+    public void search(SearchFilter searchFilter){
+        //clear previos filters
+        getDataSource().removeAllContainerFilters();
+        //filter contacts with given filter
+        getDataSource().addContainerFilter(searchFilter.getPropertyId(),searchFilter.getTerm(),true,false);
+        showListView();
+    }
+    
+    public void saveSearch(SearchFilter searchFilter){
+        tree.addItem(searchFilter);
+        tree.setParent(searchFilter, NavigationTree.SEARCH);
+        //mark the saved search as a leaf (cannot have children)
+        tree.setChildrenAllowed(searchFilter, false);
+        // make sure "Search" is expanded
+        tree.expandItem(NavigationTree.SEARCH);
+        // select the saved search
+        tree.setValue(searchFilter);
     }
 }
