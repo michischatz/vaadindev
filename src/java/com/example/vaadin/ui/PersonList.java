@@ -42,5 +42,16 @@ public class PersonList extends Table {
           * We don't want to allow users to de-select a row 
           */
          setNullSelectionAllowed(false);
+         
+         // customize email column to have mailto: links using column generator
+         addGeneratedColumn("email", new ColumnGenerator() {
+             public Component generateCell(Table source, Object itemId, Object columnId) {
+                 Person p = (Person) itemId;
+                 Link l = new Link();
+                 l.setResource(new ExternalResource("mailto:" + p.getEmail()));
+                 l.setCaption(p.getEmail());
+                 return l;
+             }
+         });
      }    
 }

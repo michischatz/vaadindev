@@ -34,11 +34,11 @@ import com.example.vaadin.data.SearchFilter;
 import com.example.vaadin.ui.SearchView;
 import com.example.vaadin.ui.SharingOptions;
 import com.example.vaadin.ui.HelpWindow;
-import com.sun.xml.internal.ws.api.PropertySet;
+//import com.sun.xml.internal.ws.api.PropertySet;
 //ClickListener
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Field;
+//import com.vaadin.ui.Field;
 //Property
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -218,6 +218,9 @@ public class MyApplication extends Application implements ClickListener, ValueCh
         //filter contacts with given filter
         getDataSource().addContainerFilter(searchFilter.getPropertyId(),searchFilter.getTerm(),true,false);
         showListView();
+        
+        getMainWindow().showNotification("Die Suche nach " + searchFilter.getPropertyId() + "=*" + searchFilter.getTerm() 
+                + "* findet " + getDataSource().size() + " Objekte.", Window.Notification.TYPE_TRAY_NOTIFICATION);
     }
     
     public void saveSearch(SearchFilter searchFilter){

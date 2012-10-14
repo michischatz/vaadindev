@@ -10,11 +10,11 @@ Kapitel derzeit in Arbeit
 
 Bereits erledigte Kapitel
 -------
-5. Creating user interactions
-4. Data Binding Basics
-3. Application Skeleton
-2. Project setup
 1. Introduction
+2. Project setup
+3. Application Skeleton
+4. Data Binding Basics
+5. Creating user interactions
 
 System
 -------
