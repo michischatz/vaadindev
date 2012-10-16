@@ -6,7 +6,7 @@ nachgebaut zum lernen von Michael Schatz
 
 Kapitel derzeit in Arbeit
 -------
-6.1 Turning email addresses into links
+6.3 Using a combo box for fluent city selection
 
 Bereits erledigte Kapitel
 -------

@@ -48,6 +48,11 @@ import com.vaadin.data.Item;
 //ImteClicks
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
+//Für die Buttons
+import com.vaadin.terminal.ThemeResource;
+//Für das Logo
+import com.vaadin.ui.Embedded;
+import com.vaadin.ui.Alignment;
 
 public class MyApplication extends Application implements ClickListener, ValueChangeListener, ItemClickListener {
     /*
@@ -75,7 +80,8 @@ public class MyApplication extends Application implements ClickListener, ValueCh
      */
     @Override
     public void init() {
-        setTheme("runo");
+//        setTheme("runo");
+        setTheme("kontakte");
         buildMainLayout();
         setMainComponent(getListView());
     }
@@ -106,10 +112,29 @@ public class MyApplication extends Application implements ClickListener, ValueCh
         lo.addComponent(share);
         lo.addComponent(help);
         
+        //Clicklistenter hinzufügen
         search.addListener((Button.ClickListener) this);
         help.addListener((ClickListener) this);
         share.addListener((ClickListener) this);
         newContact.addListener((ClickListener) this);
+        
+        //Icons den Buttons hinzufügen
+        search.setIcon(new ThemeResource("icons/32/folder-add.png"));
+        share.setIcon(new ThemeResource("icons/32/users.png"));
+        help.setIcon(new ThemeResource("icons/32/help.png"));
+        newContact.setIcon(new ThemeResource("icons/32/document-add.png"));
+        
+        lo.setMargin(true);
+        lo.setSpacing(true);
+        
+        lo.setStyleName("toolbar");
+        
+        lo.setWidth("100%");
+        //Logo einbinden
+        Embedded em = new Embedded("", new ThemeResource("images/logo.png"));
+        lo.addComponent(em);
+        lo.setComponentAlignment(em, Alignment.MIDDLE_RIGHT);
+        lo.setExpandRatio(em, 1);
         
         return lo;
     }

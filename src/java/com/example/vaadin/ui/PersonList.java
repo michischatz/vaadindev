@@ -30,6 +30,9 @@ public class PersonList extends Table {
          setContainerDataSource(app.getDataSource());
          setVisibleColumns(PersonContainer.NATURAL_COL_ORDER);
          setColumnHeaders(PersonContainer.COL_HEADERS_GERMAN);
+         /* Collapsing und Reordern erlauben */
+         setColumnCollapsingAllowed(true);
+         setColumnReorderingAllowed(true);
          
          /*
           * Make table selectable, react immediatedly to user events, and pass events to the

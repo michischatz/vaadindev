@@ -32,7 +32,8 @@ public class SearchView extends Panel {
     
     public SearchView(final MyApplication app) {
         this.app = app;
-        
+        /* Style hinzufügen */
+        addStyleName("view");
         setCaption("Kontakte suchen");
         setSizeFull();
         

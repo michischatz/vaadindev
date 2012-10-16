@@ -17,11 +17,18 @@ import com.example.vaadin.data.Person;
 import com.example.vaadin.data.PersonContainer;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.validator.RegexpValidator;
+import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.DefaultFieldFactory;
+import com.vaadin.ui.TextField;
 
 public class PersonForm extends Form implements ClickListener {
     private Button save = new Button("Speichern", (ClickListener) this);
@@ -31,6 +38,7 @@ public class PersonForm extends Form implements ClickListener {
     /* Für die neue Kontaktform */
     private boolean newContactMode = false;
     private Person newPerson = null;
+    private final ComboBox cities = new ComboBox("Stadt");
     
     public PersonForm(MyApplication app) {
         this.app = app;
@@ -46,6 +54,47 @@ public class PersonForm extends Form implements ClickListener {
         footer.addComponent(edit);
         footer.setVisible(false);
         setFooter(footer);
+        
+        /* Allow the user to enter new cities */
+        cities.addItem("");
+        /* We do not want to use null values */
+        cities.setNullSelectionAllowed(false);
+        /* Add an empty city used for selecting no city */
+        cities.addItem("");
+        /* Populate cities select using the cities in the data container */
+        PersonContainer ds = app.getDataSource();
+        for (Iterator<Person> it = ds.getItemIds().iterator(); it.hasNext();) {
+            String city = (it.next()).getCity();
+            cities.addItem(city);
+        }
+        /*
+         * Field factory for overriding how the component for city selection is created
+         */
+        setFormFieldFactory(new DefaultFieldFactory(){
+            @Override
+            public Field createField(Item item, Object propertyId,Component uiContext){
+                if (propertyId.equals("city")) {
+                    return cities;
+                }
+                Field field = super.createField(item, propertyId, uiContext);
+                if(propertyId.equals("postalCode")){
+                    TextField tf = (TextField) field;
+                    /*
+                     * We do not want to display "null" to the user when the field is empty
+                     */
+                    tf.setNullRepresentation("");
+                    /* Add a validator for postalCode and make it required */
+                    tf.addValidator(new RegexpValidator("[1-9][0-9]{4}","Postleitzahl muss gefüllt sein (5 Stellen)."));
+                    tf.setRequired(true);
+                } else if(propertyId.equals("email")) {
+                    /* Add a validator for email and make it required */
+                    field.addValidator(new EmailValidator("E-Mail muss ein '@' beinhalten und eine volle Domain (z.B. .de) sein."));
+                    field.setRequired(true);
+                }
+                
+                return field;
+            }
+        });
     }
     
     @Override
