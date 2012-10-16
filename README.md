@@ -6,7 +6,8 @@ nachgebaut zum lernen von Michael Schatz
 
 Kapitel derzeit in Arbeit
 -------
-6.3 Using a combo box for fluent city selection
+Tutorial ist beendet
+Fortsetzung mit Datenbankanbindung https://vaadin.com/tutorial/sql folgt
 
 Bereits erledigte Kapitel
 -------
@@ -15,6 +16,8 @@ Bereits erledigte Kapitel
 3. Application Skeleton
 4. Data Binding Basics
 5. Creating user interactions
+6. Tuning the user experience
+7. Building a Simple Theme
 
 System
 -------
